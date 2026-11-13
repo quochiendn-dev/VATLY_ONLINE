@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Toán 185 - Nguyễn Lộ Trạch</title>
+    <style>
+        :root {
+            --primary-color: #1565C0;
+            --primary-hover: #0D47A1;
+            --bg-color: #F5F7FA;
+            --card-bg: #FFFFFF;
+            --text-color: #2C3E50;
+            --border-color: #E0E6ED;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 850px;
+            background: var(--card-bg);
+            border-radius: 16px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+            padding: 30px;
+            text-align: center;
+        }
+
+        .year-tag {
+            color: #D32F2F;
+            font-size: 2.5rem;
+            font-weight: 900;
+            margin-bottom: 5px;
+        }
+
+        .title-banner {
+            background-color: var(--primary-color);
+            color: white;
+            display: inline-block;
+            padding: 10px 30px;
+            font-weight: bold;
+            font-size: 1.4rem;
+            border-radius: 8px;
+            margin-bottom: 30px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        /* Lưới danh sách chương học */
+        .chapters-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+        }
+
+        /* Tối ưu hiển thị trên điện thoại */
+        @media (max-width: 650px) {
+            .chapters-grid {
+                grid-template-columns: 1fr;
+            }
+            .container {
+                padding: 15px;
+            }
+            .year-tag {
+                font-size: 2rem;
+            }
+            .title-banner {
+                font-size: 1.1rem;
+                padding: 8px 20px;
+            }
+        }
+
+        .chapter-card {
+            background: white;
+            border: 2px solid var(--border-color);
+            border-radius: 12px;
+            padding: 20px;
+            font-size: 1.05rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.25s ease;
+            display: flex;
+            align-items: center;
+            justify-content: flex-start;
+            gap: 15px;
+            text-align: left;
+            line-height: 1.4;
+        }
+
+        .chapter-card:hover {
+            border-color: var(--primary-color);
+            color: var(--primary-color);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(21, 101, 192, 0.1);
+        }
+
+        .icon {
+            font-size: 1.6rem;
+            flex-shrink: 0;
+        }
+
+        /* Phần hiển thị danh sách đề thi */
+        .exam-section {
+            display: none;
+            margin-top: 20px;
+            text-align: left;
+            animation: fadeIn 0.4s ease forwards;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .back-btn {
+            background: none;
+            border: none;
+            color: var(--primary-color);
+            font-size: 1rem;
+            font-weight: bold;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            margin-bottom: 20px;
+        }
+
+        .back-btn:hover {
+            text-decoration: underline;
+        }
+
+        .exam-title {
+            font-size: 1.3rem;
+            margin-bottom: 15px;
+            color: var(--primary-color);
+            border-left: 4px solid var(--primary-color);
+            padding-left: 10px;
+        }
+
+        .exam-buttons {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+            gap: 12px;
+        }
+
+        .exam-btn {
+            background-color: #F0F4F8;
+            border: 1px solid var(--border-color);
+            padding: 12px;
+            border-radius: 8px;
+            font-weight: 500;
+            text-align: center;
+            cursor: pointer;
+            text-decoration: none;
+            color: var(--text-color);
+            transition: all 0.2s;
+        }
+
+        .exam-btn:hover {
+            background-color: var(--primary-color);
+            color: white;
+            border-color: var(--primary-color);
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div class="year-tag">TRUNG TÂM LUYỆN THI 185 - NLT</div>
+    <div class="title-banner">BỘ ĐỀ TOÁN KHỐI 12</div>
+
+    <div class="chapters-grid" id="chaptersGrid">
+        <div class="chapter-card" onclick="openExamSection('daoham', 'Ứng Dụng Đạo Hàm')">
+            <span class="icon">📈</span>
+            <span>1. Ứng dụng đạo hàm</span>
+        </div>
+        <div class="chapter-card" onclick="openExamSection('oxyz', 'Hệ Toạ Độ Oxyz')">
+            <span class="icon">📐</span>
+            <span>2. Hệ toạ độ Oxyz</span>
+        </div>
+        <div class="chapter-card" onclick="openExamSection('phantoan', 'Các Số Đặc Trưng Đo Độ Phân Tán MSL Ghép Nhóm')">
+            <span class="icon">📊</span>
+            <span>3. Các số đặc trưng đo độ phân tán MSL ghép nhóm</span>
+        </div>
+        <div class="chapter-card" onclick="openExamSection('tichphan', 'Nguyên Hàm - Tích Phân')">
+            <span class="icon">∫</span>
+            <span>4. Nguyên hàm - Tích phân</span>
+        </div>
+        <div class="chapter-card" onclick="openExamSection('toadokk', 'Phương Pháp Toạ Độ Trong Không Gian')">
+            <span class="icon">🌐</span>
+            <span>5. Phương pháp toạ độ trong không gian</span>
+        </div>
+        <div class="chapter-card" onclick="openExamSection('xacsuat', 'Xác Suất Có Điều Kiện')">
+            <span class="icon">🎲</span>
+            <span>6. Xác suất có điều kiện</span>
+        </div>
+    </div>
+
+    <div class="exam-section" id="examSection">
+        <button class="back-btn" onclick="goBack()">⬅ Quay lại danh sách chương</button>
+        <h3 class="exam-title" id="currentChapterTitle">Tên chương học</h3>
+        
+        <div class="exam-buttons" id="examButtonsContainer">
+            </div>
+    </div>
+</div>
+
+<script>
+    // Dữ liệu đề thi cho 6 chương học mới
+    const examData = {
+        daoham: [
+            { name: "Đề 01: Sự biến thiên và cực trị của hàm số - Mức độ 1", link: "#" },
+            { name: "Đề 02: Sự biến thiên và cực trị của hàm số - Mức độ 2", link: "#" },
+            { name: "Đề 03: Giá trị lớn nhất - nhỏ nhất - Mức độ 1", link: "#" },
+            { name: "Đề 04: Giá trị lớn nhất - nhỏ nhất - Mức độ 2", link: "#" },
+            { name: "Đề 05: Tiệm cận", link: "#" },
+            { name: "Đề 06: Khảo sát hàm số", link: "#" }
+        ],
+        oxyz: [
+            { name: "Đề tọa độ điểm", link: "#" },
+            { name: "Đề PT mặt phẳng", link: "#" },
+            { name: "Đề tổng hợp Oxyz", link: "#" }
+        ],
+        phantoan: [
+            { name: "Đề Khoảng biến thiên", link: "#" },
+            { name: "Đề Phương sai & Độ lệch chuẩn", link: "#" },
+            { name: "Đề mẫu số liệu ghép nhóm", link: "#" }
+        ],
+        tichphan: [
+            { name: "Đề nguyên hàm cơ bản", link: "#" },
+            { name: "Đề tích phân đổi biến", link: "#" },
+            { name: "Đề ứng dụng diện tích", link: "#" }
+        ],
+        toadokk: [
+            { name: "Đề PT đường thẳng", link: "#" },
+            { name: "Đề PT mặt cầu", link: "#" },
+            { name: "Đề Góc & Khoảng cách", link: "#" }
+        ],
+        xacsuat: [
+            { name: "Đề XS điều kiện 1", link: "#" },
+            { name: "Đề Công thức XS toàn phần", link: "#" },
+            { name: "Đề Bayes nâng cao", link: "#" }
+        ]
+    };
+
+    function openExamSection(chapterKey, chapterName) {
+        document.getElementById('chaptersGrid').style.display = 'none';
+        const examSection = document.getElementById('examSection');
+        examSection.style.display = 'block';
+        
+        document.getElementById('currentChapterTitle').innerText = chapterName;
+        
+        const container = document.getElementById('examButtonsContainer');
+        container.innerHTML = '';
+
+        const exams = examData[chapterKey] || [];
+        exams.forEach(exam => {
+            const btn = document.createElement('a');
+            btn.href = exam.link;
+            btn.className = 'exam-btn';
+            btn.innerText = exam.name;
+            container.appendChild(btn);
+        });
+    }
+
+    function goBack() {
+        document.getElementById('examSection').style.display = 'none';
+        document.getElementById('chaptersGrid').style.display = 'grid';
+    }
+</script>
+
+</body>
+</html>
