@@ -1,0 +1,626 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VẬT LÝ THPT (10 - 11 - 12) - TRẦN QUỐC HIỀN</title>
+    <style>
+        :root {
+            --primary-color: #1565C0;
+            --primary-hover: #0D47A1;
+            --bg-color: #F5F7FA;
+            --card-bg: #FFFFFF;
+            --text-color: #2C3E50;
+            --border-color: #E0E6ED;
+            --accent-bg: #E3F2FD;
+            --grade-10: #0288D1;
+            --grade-11: #00796B;
+            --grade-12: #1565C0;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            min-height: 100vh;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 920px;
+            background: var(--card-bg);
+            border-radius: 16px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.06);
+            padding: 30px;
+            text-align: center;
+            margin-top: 10px;
+        }
+
+        .year-tag {
+            color: #D32F2F;
+            font-size: 2.3rem;
+            font-weight: 900;
+            margin-bottom: 5px;
+        }
+
+        .title-banner {
+            background-color: var(--primary-color);
+            color: white;
+            display: inline-block;
+            padding: 10px 30px;
+            font-weight: bold;
+            font-size: 1.35rem;
+            border-radius: 8px;
+            margin-bottom: 25px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            transition: background-color 0.3s ease;
+        }
+
+        /* Thanh chọn khối lớp */
+        .grade-tabs {
+            display: flex;
+            justify-content: center;
+            gap: 12px;
+            margin-bottom: 28px;
+            flex-wrap: wrap;
+        }
+
+        .grade-tab {
+            padding: 12px 26px;
+            font-size: 1.05rem;
+            font-weight: 700;
+            border: 2px solid var(--border-color);
+            border-radius: 10px;
+            background-color: #FFFFFF;
+            color: var(--text-color);
+            cursor: pointer;
+            transition: all 0.25s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .grade-tab:hover {
+            border-color: var(--primary-color);
+            color: var(--primary-color);
+            transform: translateY(-2px);
+        }
+
+        .grade-tab.active {
+            background-color: var(--primary-color);
+            border-color: var(--primary-color);
+            color: #FFFFFF;
+            box-shadow: 0 4px 12px rgba(21, 101, 192, 0.25);
+        }
+
+        /* Lưới danh sách chương học */
+        .chapters-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 18px;
+            animation: fadeIn 0.3s ease forwards;
+        }
+
+        @media (max-width: 650px) {
+            .chapters-grid {
+                grid-template-columns: 1fr;
+            }
+            .container {
+                padding: 16px;
+            }
+            .year-tag {
+                font-size: 1.8rem;
+            }
+            .title-banner {
+                font-size: 1.05rem;
+                padding: 8px 18px;
+            }
+            .grade-tab {
+                padding: 10px 16px;
+                font-size: 0.98rem;
+                flex: 1;
+                justify-content: center;
+            }
+        }
+
+        .chapter-card {
+            background: white;
+            border: 2px solid var(--border-color);
+            border-radius: 12px;
+            padding: 20px 18px;
+            font-size: 1.05rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.25s ease;
+            display: flex;
+            align-items: center;
+            justify-content: flex-start;
+            gap: 14px;
+            text-align: left;
+            line-height: 1.4;
+        }
+
+        .chapter-card:hover {
+            border-color: var(--primary-color);
+            color: var(--primary-color);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(21, 101, 192, 0.12);
+        }
+
+        .icon {
+            font-size: 1.8rem;
+            flex-shrink: 0;
+        }
+
+        /* Phần hiển thị danh sách bài học và đề thi */
+        .exam-section {
+            display: none;
+            margin-top: 5px;
+            text-align: left;
+            animation: fadeIn 0.35s ease forwards;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(8px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .back-btn {
+            background: none;
+            border: none;
+            color: var(--primary-color);
+            font-size: 1rem;
+            font-weight: bold;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            margin-bottom: 20px;
+            padding: 7px 14px;
+            border-radius: 6px;
+            background-color: var(--accent-bg);
+            transition: background 0.2s;
+        }
+
+        .back-btn:hover {
+            background-color: #BBDEFB;
+        }
+
+        .exam-title {
+            font-size: 1.3rem;
+            margin-bottom: 20px;
+            color: var(--primary-color);
+            border-left: 5px solid var(--primary-color);
+            padding-left: 12px;
+            text-transform: uppercase;
+        }
+
+        /* Nhóm từng bài học */
+        .lesson-group {
+            margin-bottom: 22px;
+            padding-bottom: 18px;
+            border-bottom: 1px dashed var(--border-color);
+        }
+
+        .lesson-group:last-child {
+            border-bottom: none;
+            margin-bottom: 0;
+            padding-bottom: 0;
+        }
+
+        .lesson-name {
+            font-size: 1.05rem;
+            font-weight: 700;
+            color: #1E293B;
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .lesson-name.special-exam {
+            color: #D32F2F;
+        }
+
+        .exam-buttons {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+            gap: 10px;
+        }
+
+        .exam-btn {
+            background-color: #F8FAFC;
+            border: 1px solid #CBD5E1;
+            padding: 10px 8px;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 0.95rem;
+            text-align: center;
+            cursor: pointer;
+            text-decoration: none;
+            color: var(--text-color);
+            transition: all 0.2s;
+        }
+
+        .exam-btn:hover {
+            background-color: var(--primary-color);
+            color: white;
+            border-color: var(--primary-color);
+            transform: translateY(-1px);
+        }
+
+        .exam-btn.special-btn {
+            background-color: #FFF5F5;
+            border-color: #FEB2B2;
+            color: #C53030;
+        }
+
+        .exam-btn.special-btn:hover {
+            background-color: #D32F2F;
+            color: white;
+            border-color: #D32F2F;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div class="year-tag">TRUNG TÂM GIA SƯ - 48</div>
+    <div class="title-banner" id="mainBanner">HỆ THỐNG ĐỀ ÔN TẬP VẬT LÝ 12</div>
+
+    <!-- Thanh chuyển đổi nhanh giữa 3 khối -->
+    <div class="grade-tabs">
+        <button class="grade-tab" id="tab-10" onclick="selectGrade('10')">📘 Khối 10</button>
+        <button class="grade-tab" id="tab-11" onclick="selectGrade('11')">📗 Khối 11</button>
+        <button class="grade-tab active" id="tab-12" onclick="selectGrade('12')">📕 Khối 12</button>
+    </div>
+
+    <!-- Lưới danh sách chương học -->
+    <div class="chapters-grid" id="chaptersGrid"></div>
+
+    <!-- Khu vực hiển thị các bài học và đề thi -->
+    <div class="exam-section" id="examSection">
+        <button class="back-btn" onclick="goBack()">⬅ Quay lại danh sách chương</button>
+        <h3 class="exam-title" id="currentChapterTitle">Tên chương học</h3>
+        <div id="lessonsContainer"></div>
+    </div>
+</div>
+
+<script>
+    // Hàm tạo nhanh 5 đề mặc định cho mỗi bài (thay "#" bằng link đề thực tế khi cần)
+    function createDefaultExams(prefix) {
+        return [
+            { name: "Đề số 1", link: "#" },
+            { name: "Đề số 2", link: "#" },
+            { name: "Đề số 3", link: "#" },
+            { name: "Đề số 4", link: "#" },
+            { name: "Đề số 5", link: "#" }
+        ];
+    }
+
+    // Dữ liệu tổng hợp cả 3 khối 10, 11, 12
+    const allPhysicsData = {
+        "10": {
+            banner: "VẬT LÝ KHỐI 10",
+            chapters: [
+                {
+                    key: "10_c1",
+                    icon: "🔬",
+                    shortTitle: "Chương I. Mở đầu",
+                    fullTitle: "Chương I. Mở Đầu",
+                    lessons: [
+                        { lesson: "Bài 1. Làm quen với Vật lí", exams: createDefaultExams("10_c1_b1") },
+                        { lesson: "Bài 2. Các quy tắc an toàn trong phòng thực hành Vật lí", exams: createDefaultExams("10_c1_b2") },
+                        { lesson: "Bài 3. Thực hành: Tính sai số trong phép đo. Ghi kết quả đo", exams: createDefaultExams("10_c1_b3") }
+                    ]
+                },
+                {
+                    key: "10_c2",
+                    icon: "🏃",
+                    shortTitle: "Chương II. Động học",
+                    fullTitle: "Chương II. Động Học",
+                    lessons: [
+                        { lesson: "Bài 4. Độ dịch chuyển và quãng đường đi được", exams: createDefaultExams("10_c2_b4") },
+                        { lesson: "Bài 5. Tốc độ và vận tốc", exams: createDefaultExams("10_c2_b5") },
+                        { lesson: "Bài 6. Thực hành: Đo tốc độ của vật chuyển động", exams: createDefaultExams("10_c2_b6") },
+                        { lesson: "Bài 7. Đồ thị độ dịch chuyển – thời gian", exams: createDefaultExams("10_c2_b7") },
+                        { lesson: "Bài 8. Chuyển động biến đổi. Gia tốc", exams: createDefaultExams("10_c2_b8") },
+                        { lesson: "Bài 9. Chuyển động thẳng biến đổi đều", exams: createDefaultExams("10_c2_b9") },
+                        { lesson: "Bài 10. Sự rơi tự do", exams: createDefaultExams("10_c2_b10") },
+                        { lesson: "Bài 11. Thực hành: Đo gia tốc rơi tự do", exams: createDefaultExams("10_c2_b11") },
+                        { lesson: "Bài 12. Chuyển động ném", exams: createDefaultExams("10_c2_b12") },
+                        { lesson: "ĐỀ ÔN TẬP GIỮA HỌC KÌ I (GHKI)", isSpecial: true, exams: createDefaultExams("10_c2_ghk1") }
+                    ]
+                },
+                {
+                    key: "10_c3",
+                    icon: "⚖️",
+                    shortTitle: "Chương III. Động lực học",
+                    fullTitle: "Chương III. Động Lực Học",
+                    lessons: [
+                        { lesson: "Bài 13. Tổng hợp và phân tích lực. Cân bằng lực", exams: createDefaultExams("10_c3_b13") },
+                        { lesson: "Bài 14. Định luật 1 Newton", exams: createDefaultExams("10_c3_b14") },
+                        { lesson: "Bài 15. Định luật 2 Newton", exams: createDefaultExams("10_c3_b15") },
+                        { lesson: "Bài 16. Định luật 3 Newton", exams: createDefaultExams("10_c3_b16") },
+                        { lesson: "Bài 17. Trọng lực và lực căng", exams: createDefaultExams("10_c3_b17") },
+                        { lesson: "Bài 18. Lực ma sát", exams: createDefaultExams("10_c3_b18") },
+                        { lesson: "Bài 19. Lực cản và lực nâng", exams: createDefaultExams("10_c3_b19") },
+                        { lesson: "Bài 20. Một số ví dụ về cách giải các bài toán thuộc phần động lực học", exams: createDefaultExams("10_c3_b20") },
+                        { lesson: "Bài 21. Moment lực. Cân bằng của vật rắn", exams: createDefaultExams("10_c3_b21") },
+                        { lesson: "Bài 22. Thực hành: Tổng hợp lực", exams: createDefaultExams("10_c3_b22") },
+                        { lesson: "ĐỀ ÔN TẬP CUỐI HỌC KÌ I (CHKI)", isSpecial: true, exams: createDefaultExams("10_c3_chk1") }
+                    ]
+                },
+                {
+                    key: "10_c4",
+                    icon: "🔋",
+                    shortTitle: "Chương IV. Năng lượng, công, công suất",
+                    fullTitle: "Chương IV. Năng Lượng, Công, Công Suất",
+                    lessons: [
+                        { lesson: "Bài 23. Năng lượng. Công cơ học", exams: createDefaultExams("10_c4_b23") },
+                        { lesson: "Bài 24. Công suất", exams: createDefaultExams("10_c4_b24") },
+                        { lesson: "Bài 25. Động năng, thế năng", exams: createDefaultExams("10_c4_b25") },
+                        { lesson: "Bài 26. Cơ năng và định luật bảo toàn cơ năng", exams: createDefaultExams("10_c4_b26") },
+                        { lesson: "Bài 27. Hiệu suất", exams: createDefaultExams("10_c4_b27") },
+                        { lesson: "ĐỀ ÔN TẬP GIỮA HỌC KÌ II (GHKII)", isSpecial: true, exams: createDefaultExams("10_c4_ghk2") }
+                    ]
+                },
+                {
+                    key: "10_c5",
+                    icon: "🎱",
+                    shortTitle: "Chương V. Động lượng",
+                    fullTitle: "Chương V. Động Lượng",
+                    lessons: [
+                        { lesson: "Bài 28. Động lượng", exams: createDefaultExams("10_c5_b28") },
+                        { lesson: "Bài 29. Định luật bảo toàn động lượng", exams: createDefaultExams("10_c5_b29") },
+                        { lesson: "Bài 30. Thực hành: Xác định động lượng của vật trước và sau va chạm", exams: createDefaultExams("10_c5_b30") }
+                    ]
+                },
+                {
+                    key: "10_c6",
+                    icon: "🎡",
+                    shortTitle: "Chương VI. Chuyển động tròn đều",
+                    fullTitle: "Chương VI. Chuyển Động Tròn Đều",
+                    lessons: [
+                        { lesson: "Bài 31. Động học của chuyển động tròn đều", exams: createDefaultExams("10_c6_b31") },
+                        { lesson: "Bài 32. Lực hướng tâm và gia tốc hướng tâm", exams: createDefaultExams("10_c6_b32") }
+                    ]
+                },
+                {
+                    key: "10_c7",
+                    icon: "💧",
+                    shortTitle: "Chương VII. Biến dạng của vật rắn. Áp suất chất lỏng",
+                    fullTitle: "Chương VII. Biến Dạng Của Vật Rắn. Áp Suất Chất Lỏng",
+                    lessons: [
+                        { lesson: "Bài 33. Biến dạng của vật rắn", exams: createDefaultExams("10_c7_b33") },
+                        { lesson: "Bài 34. Khối lượng riêng. Áp suất chất lỏng", exams: createDefaultExams("10_c7_b34") },
+                        { lesson: "ĐỀ ÔN TẬP CUỐI HỌC KÌ II (CHKII)", isSpecial: true, exams: createDefaultExams("10_c7_chk2") }
+                    ]
+                }
+            ]
+        },
+        "11": {
+            banner: "VẬT LÝ KHỐI 11",
+            chapters: [
+                {
+                    key: "11_c1",
+                    icon: "〰️",
+                    shortTitle: "Chương I. Dao động",
+                    fullTitle: "Chương I. Dao Động",
+                    lessons: [
+                        { lesson: "Bài 1. Dao động điều hòa", exams: createDefaultExams("11_c1_b1") },
+                        { lesson: "Bài 2. Mô tả dao động điều hòa", exams: createDefaultExams("11_c1_b2") },
+                        { lesson: "Bài 3. Vận tốc, gia tốc trong dao động điều hòa", exams: createDefaultExams("11_c1_b3") },
+                        { lesson: "Bài 4. Bài tập về dao động điều hòa", exams: createDefaultExams("11_c1_b4") },
+                        { lesson: "Bài 5. Động năng. Thế năng. Sự chuyển hóa năng lượng trong dao động điều hòa", exams: createDefaultExams("11_c1_b5") },
+                        { lesson: "Bài 6. Dao động tắt dần. Dao động cưỡng bức. Hiện tượng cộng hưởng", exams: createDefaultExams("11_c1_b6") },
+                        { lesson: "Bài 7. Bài tập về sự chuyển hóa năng lượng trong dao động điều hòa", exams: createDefaultExams("11_c1_b7") }
+                    ]
+                },
+                {
+                    key: "11_c2",
+                    icon: "🌊",
+                    shortTitle: "Chương II. Sóng",
+                    fullTitle: "Chương II. Sóng",
+                    lessons: [
+                        { lesson: "Bài 8. Mô tả sóng", exams: createDefaultExams("11_c2_b8") },
+                        { lesson: "Bài 9. Sóng ngang. Sóng dọc. Sự truyền năng lượng của sóng cơ", exams: createDefaultExams("11_c2_b9") },
+                        { lesson: "Bài 10. Thực hành: Đo tần số của sóng âm", exams: createDefaultExams("11_c2_b10") },
+                        { lesson: "Bài 11. Sóng điện từ", exams: createDefaultExams("11_c2_b11") },
+                        { lesson: "Bài 12. Giao thoa sóng", exams: createDefaultExams("11_c2_b12") },
+                        { lesson: "Bài 13. Sóng dừng", exams: createDefaultExams("11_c2_b13") },
+                        { lesson: "Bài 14. Bài tập về sóng", exams: createDefaultExams("11_c2_b14") }
+                    ]
+                },
+                {
+                    key: "11_c3",
+                    icon: "⚡",
+                    shortTitle: "Chương III. Điện trường",
+                    fullTitle: "Chương III. Điện Trường",
+                    lessons: [
+                        { lesson: "Bài 16. Lực tương tác giữa các điện tích", exams: createDefaultExams("11_c3_b16") },
+                        { lesson: "Bài 17. Khái niệm điện trường", exams: createDefaultExams("11_c3_b17") },
+                        { lesson: "Bài 18. Điện trường đều", exams: createDefaultExams("11_c3_b18") },
+                        { lesson: "Bài 19. Thế năng điện", exams: createDefaultExams("11_c3_b19") },
+                        { lesson: "Bài 20. Điện thế", exams: createDefaultExams("11_c3_b20") },
+                        { lesson: "Bài 21. Tụ điện", exams: createDefaultExams("11_c3_b21") }
+                    ]
+                },
+                {
+                    key: "11_c4",
+                    icon: "🔌",
+                    shortTitle: "Chương IV. Dòng điện, mạch điện",
+                    fullTitle: "Chương IV. Dòng Điện, Mạch Điện",
+                    lessons: [
+                        { lesson: "Bài 22. Cường độ dòng điện", exams: createDefaultExams("11_c4_b22") },
+                        { lesson: "Bài 23. Điện trở. Định luật Ohm", exams: createDefaultExams("11_c4_b23") },
+                        { lesson: "Bài 24. Nguồn điện", exams: createDefaultExams("11_c4_b24") },
+                        { lesson: "Bài 25. Năng lượng điện và công suất điện", exams: createDefaultExams("11_c4_b25") },
+                        { lesson: "Bài 26. Thực hành: Đo suất điện động và điện trở trong của pin điện hóa", exams: createDefaultExams("11_c4_b26") }
+                    ]
+                }
+            ]
+        },
+        "12": {
+            banner: "VẬT LÝ KHỐI 12",
+            chapters: [
+                {
+                    key: "12_c1",
+                    icon: "🌡️",
+                    shortTitle: "Chương I. Vật lí nhiệt",
+                    fullTitle: "Chương I. Vật Lí Nhiệt",
+                    lessons: [
+                        { lesson: "Bài 1. Cấu trúc của chất. Sự chuyển thể", exams: createDefaultExams("12_c1_b1") },
+                        { lesson: "Bài 2. Nội năng. Định luật I của nhiệt động lực học", exams: createDefaultExams("12_c1_b2") },
+                        { lesson: "Bài 3. Nhiệt độ. Thang nhiệt độ – nhiệt kế", exams: createDefaultExams("12_c1_b3") },
+                        { lesson: "Bài 4. Nhiệt dung riêng", exams: createDefaultExams("12_c1_b4") },
+                        { lesson: "Bài 5. Nhiệt nóng chảy riêng", exams: createDefaultExams("12_c1_b5") },
+                        { lesson: "Bài 6. Nhiệt hóa hơi riêng", exams: createDefaultExams("12_c1_b6") },
+                        { lesson: "Bài 7. Bài tập về vật lí nhiệt", exams: createDefaultExams("12_c1_b7") },
+                        { lesson: "ĐỀ ÔN TẬP GIỮA HỌC KÌ I (GHKI)", isSpecial: true, exams: createDefaultExams("12_c1_ghk1") }
+                    ]
+                },
+                {
+                    key: "12_c2",
+                    icon: "🎈",
+                    shortTitle: "Chương II. Khí lí tưởng",
+                    fullTitle: "Chương II. Khí Lí Tưởng",
+                    lessons: [
+                        { lesson: "Bài 8. Mô hình động học phân tử chất khí", exams: createDefaultExams("12_c2_b8") },
+                        { lesson: "Bài 9. Định luật Boyle", exams: createDefaultExams("12_c2_b9") },
+                        { lesson: "Bài 10. Định luật Charles", exams: createDefaultExams("12_c2_b10") },
+                        { lesson: "Bài 11. Phương trình trạng thái của khí lí tưởng", exams: createDefaultExams("12_c2_b11") },
+                        { lesson: "Bài 12. Áp suất khí theo mô hình động học phân tử. Quan hệ giữa động năng phân tử và nhiệt độ", exams: createDefaultExams("12_c2_b12") },
+                        { lesson: "Bài 13. Bài tập về khí lí tưởng", exams: createDefaultExams("12_c2_b13") },
+                        { lesson: "ĐỀ ÔN TẬP CUỐI HỌC KÌ I (CHKI)", isSpecial: true, exams: createDefaultExams("12_c2_chk1") }
+                    ]
+                },
+                {
+                    key: "12_c3",
+                    icon: "🧲",
+                    shortTitle: "Chương III. Từ trường",
+                    fullTitle: "Chương III. Từ Trường",
+                    lessons: [
+                        { lesson: "Bài 14. Từ trường", exams: createDefaultExams("12_c3_b14") },
+                        { lesson: "Bài 15. Lực từ tác dụng lên dây dẫn mang dòng điện. Cảm ứng từ", exams: createDefaultExams("12_c3_b15") },
+                        { lesson: "Bài 16. Từ thông. Hiện tượng cảm ứng điện từ", exams: createDefaultExams("12_c3_b16") },
+                        { lesson: "Bài 17. Máy phát điện xoay chiều", exams: createDefaultExams("12_c3_b17") },
+                        { lesson: "Bài 18. Ứng dụng hiện tượng cảm ứng điện từ", exams: createDefaultExams("12_c3_b18") },
+                        { lesson: "Bài 19. Điện từ trường. Mô hình sóng điện từ", exams: createDefaultExams("12_c3_b19") },
+                        { lesson: "Bài 20. Bài tập về từ trường", exams: createDefaultExams("12_c3_b20") },
+                        { lesson: "ĐỀ ÔN TẬP GIỮA HỌC KÌ II (GHKII)", isSpecial: true, exams: createDefaultExams("12_c3_ghk2") }
+                    ]
+                },
+                {
+                    key: "12_c4",
+                    icon: "⚛️",
+                    shortTitle: "Chương IV. Vật lí hạt nhân",
+                    fullTitle: "Chương IV. Vật Lí Hạt Nhân",
+                    lessons: [
+                        { lesson: "Bài 21. Cấu trúc hạt nhân", exams: createDefaultExams("12_c4_b21") },
+                        { lesson: "Bài 22. Phản ứng hạt nhân và năng lượng liên kết", exams: createDefaultExams("12_c4_b22") },
+                        { lesson: "Bài 23. Hiện tượng phóng xạ", exams: createDefaultExams("12_c4_b23") },
+                        { lesson: "Bài 24. Công nghiệp hạt nhân", exams: createDefaultExams("12_c4_b24") },
+                        { lesson: "Bài 25. Bài tập về vật lí hạt nhân", exams: createDefaultExams("12_c4_b25") },
+                        { lesson: "ĐỀ ÔN TẬP CUỐI HỌC KÌ II (CHKII)", isSpecial: true, exams: createDefaultExams("12_c4_chk2") }
+                    ]
+                }
+            ]
+        }
+    };
+
+    let currentGrade = "12";
+
+    function selectGrade(grade) {
+        currentGrade = grade;
+
+        // Cập nhật trạng thái nút Tab
+        document.querySelectorAll('.grade-tab').forEach(tab => tab.classList.remove('active'));
+        document.getElementById('tab-' + grade).classList.add('active');
+
+        // Cập nhật tiêu đề banner
+        const gradeObj = allPhysicsData[grade];
+        document.getElementById('mainBanner').innerText = gradeObj.banner;
+
+        // Ẩn vùng chi tiết bài học (nếu đang mở) và hiển thị lại lưới chương
+        document.getElementById('examSection').style.display = 'none';
+        const grid = document.getElementById('chaptersGrid');
+        grid.style.display = 'grid';
+        grid.innerHTML = '';
+
+        gradeObj.chapters.forEach(chap => {
+            const card = document.createElement('div');
+            card.className = 'chapter-card';
+            card.onclick = () => openExamSection(chap);
+
+            const iconSpan = document.createElement('span');
+            iconSpan.className = 'icon';
+            iconSpan.innerText = chap.icon;
+
+            const titleSpan = document.createElement('span');
+            titleSpan.innerText = chap.shortTitle;
+
+            card.appendChild(iconSpan);
+            card.appendChild(titleSpan);
+            grid.appendChild(card);
+        });
+    }
+
+    function openExamSection(chapterObj) {
+        document.getElementById('chaptersGrid').style.display = 'none';
+        const examSection = document.getElementById('examSection');
+        examSection.style.display = 'block';
+
+        document.getElementById('currentChapterTitle').innerText =
+            "Khối " + currentGrade + " — " + chapterObj.fullTitle;
+
+        const container = document.getElementById('lessonsContainer');
+        container.innerHTML = '';
+
+        chapterObj.lessons.forEach(item => {
+            const lessonGroup = document.createElement('div');
+            lessonGroup.className = 'lesson-group';
+
+            const lessonTitle = document.createElement('div');
+            lessonTitle.className = item.isSpecial ? 'lesson-name special-exam' : 'lesson-name';
+            lessonTitle.innerText = (item.isSpecial ? "🔥 " : "📘 ") + item.lesson;
+            lessonGroup.appendChild(lessonTitle);
+
+            const btnGrid = document.createElement('div');
+            btnGrid.className = 'exam-buttons';
+
+            item.exams.forEach(exam => {
+                const btn = document.createElement('a');
+                btn.href = exam.link;
+                btn.className = item.isSpecial ? 'exam-btn special-btn' : 'exam-btn';
+                btn.innerText = exam.name;
+                btnGrid.appendChild(btn);
+            });
+
+            lessonGroup.appendChild(btnGrid);
+            container.appendChild(lessonGroup);
+        });
+    }
+
+    function goBack() {
+        document.getElementById('examSection').style.display = 'none';
+        document.getElementById('chaptersGrid').style.display = 'grid';
+    }
+
+    // Mặc định hiển thị Khối 12 khi mở trang (có thể đổi thành '10' hoặc '11' nếu muốn)
+    selectGrade('12');
+</script>
+
+</body>
+</html>
